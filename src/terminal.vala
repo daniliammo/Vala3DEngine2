@@ -56,6 +56,8 @@ public class TerminalRenderer {
         }
     }
 
+    public const char EndOfLine = '\n';
+
     public void render() {
         uint8[] output = new uint8[width * height + height];
         int pos = 0;
@@ -63,7 +65,7 @@ public class TerminalRenderer {
         for (int y = 0; y < height; y++) {
             Posix.memcpy(output[pos:], buffer[y * width: y * width + width], width);
             pos += width;
-            output[pos] = '\n';
+            output[pos] = EndOfLine;
             pos++;
         }
 
