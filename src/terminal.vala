@@ -2,12 +2,14 @@ public class TerminalRenderer {
     public int width;
     public int height;
     private char[] buffer;
-    private const float CHAR_ASPECT = 20f / 9f; // Оптимальное соотношение для терминала
+    private uint8[] output; // Будет переиспользоваться
+    private const float CHAR_ASPECT = 20f / 9f;
 
     public TerminalRenderer(int width, int height) {
         this.width = width;
         this.height = height;
         this.buffer = new char[width * height];
+        this.output = new uint8[width * height + height]; // Инициализируем один раз
         clear();
     }
 
@@ -57,9 +59,9 @@ public class TerminalRenderer {
     }
 
     public const char EndOfLine = '\n';
+    public const uint8 DefaultFD = 1;
 
     public void render() {
-        uint8[] output = new uint8[width * height + height];
         int pos = 0;
 
         for (int y = 0; y < height; y++) {
@@ -69,7 +71,7 @@ public class TerminalRenderer {
             pos++;
         }
 
-        Posix.write(1, output, pos);
+        Posix.write(DefaultFD, output, pos);
     }
 
     public void draw_object(Object3D obj) {
